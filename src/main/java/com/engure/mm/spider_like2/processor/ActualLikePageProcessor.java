@@ -1,16 +1,19 @@
-package com.engure.mm.spider_like.processor;
+package com.engure.mm.spider_like2.processor;
 
-import com.engure.mm.spider_like.LikeSpider;
+import com.engure.mm.spider_like2.MySpider;
+import lombok.extern.slf4j.Slf4j;
 import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Site;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
+@Slf4j
 public class ActualLikePageProcessor implements LikePageProcessor {
 
     @Override
-    public void doProcess(Page page) {
+    public void process(Page page) {
 
         String url = page.getRequest().getUrl();
 
@@ -27,7 +30,8 @@ public class ActualLikePageProcessor implements LikePageProcessor {
             for (int i = 0; i < albumsLinks.size(); i++) {
 
                 try {
-                    System.out.println("影集：" + albumsTitle.get(i) + " --> " + albumsLinks.get(i));
+                    //System.out.println("影集：" + albumsTitle.get(i) + " --> " + albumsLinks.get(i));
+                    log.info("影集：" + albumsTitle.get(i) + " --> " + albumsLinks.get(i));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -47,9 +51,12 @@ public class ActualLikePageProcessor implements LikePageProcessor {
             List<String> photoLinks1 = page.getHtml().xpath(xpath1).all();//   /123123/abc.jpg, /123123/efg.jpg.....
             List<String> photoLinks2 = page.getHtml().xpath(xpath2).all();//   /albums/123456/2, /albums/123456/3....
             //System.out.println("影集 ------------------------------------");
-            System.out.println("获取影集！" + url);
-            System.out.println(photoLinks1);
-            System.out.println(photoLinks2);
+            //System.out.println("获取影集！" + url);
+            //System.out.println(photoLinks1);
+            //System.out.println(photoLinks2);
+            log.info("获取影集！" + url);
+            log.info(photoLinks1.toString());
+            log.info(photoLinks2.toString());
 
             page.addTargetRequests(photoLinks1);
             page.addTargetRequests(photoLinks2);
@@ -87,11 +94,11 @@ public class ActualLikePageProcessor implements LikePageProcessor {
             //保存图片？
 
             try {
-                String storePath = LikeSpider.STORE_PATH + "\\" + imgInfo[1] + "\\" + imgInfo[2];
-                System.out.println(storePath);
+                String storePath = MySpider.STORE_PATH + "\\" + imgInfo[1] + "\\" + imgInfo[2];
+                //System.out.println(storePath);
 
                 //创建存放文件的目录    PATH\\123456\\
-                String storeDirectory = LikeSpider.STORE_PATH + "\\" + imgInfo[1];
+                String storeDirectory = MySpider.STORE_PATH + "\\" + imgInfo[1];
                 File directory = new File(storeDirectory);
                 if (!directory.exists()) directory.mkdir();
 
@@ -104,9 +111,11 @@ public class ActualLikePageProcessor implements LikePageProcessor {
                 fileOutputStream.flush();
                 fileOutputStream.close();
 
-                System.out.println("写入成功！" + storePath);
+                //System.out.println("写入成功！" + storePath);
+                log.info("写入成功！" + storePath);
             } catch (Exception e) {
-                System.out.println("保存失败！！！！！");
+                //System.out.println("保存失败！！！！！");
+                log.info("保存失败！！！！！");
                 e.printStackTrace();
             }
 
@@ -116,5 +125,12 @@ public class ActualLikePageProcessor implements LikePageProcessor {
 
     }
 
+    private final Site site = Site.me()
+            .setCharset("UTF-8")
+            .setRetryTimes(3).setTimeOut(1000 * 5).setSleepTime(200);
 
+    @Override
+    public Site getSite() {
+        return site;
+    }
 }
