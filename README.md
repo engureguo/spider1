@@ -4,7 +4,7 @@
 
 ---
 
-> 配置 log4j
+### 配置 log4j
 
 
 
@@ -83,14 +83,14 @@ log4j.appender.file.layout.ConversionPattern=%d{MM-dd HH:mm:ss} >> [%p] >> [%thr
 
 
 
-> 对于需要滚动的页面，它的原理是JS动态加载，怎么爬取内容？
+### 对于需要滚动的页面，它的原理是JS动态加载，怎么爬取内容？
 
 1. 使用自动化工具
 2. 直接爬取网页获取的内容只有一小部分，可以手工下拉页面后保存静态页面，程序开始运行时先加载和解析页面
 
 
 
-> 使用切面统计爬虫运行时间
+### 使用注解+切面统计爬虫运行时间
 
 ```java
 @Record
@@ -109,7 +109,7 @@ public void startCrawl() {
 
 
 
-> 线程池的线程数量怎么设置？
+### 线程池的线程数量怎么设置？
 
 IO密集型，比较不同线程下的性能：
 
@@ -124,11 +124,11 @@ IO阻塞，CPU时间浪费，增加线程以增加效率
 
 
 
-> 集成布隆过滤器，实现URL去重
+### 集成布隆过滤器，实现URL去重
 
 guava-BloomFilter https://blog.csdn.net/qq_43341057/article/details/120027164
 
-参照 BloomFilterDuplicateRemover：
+参照已知的 `BloomFilterDuplicateRemover` 进行实现：
 
 ```java
 public class MyBloomFilterDuplicateRemover implements DuplicateRemover {
@@ -182,7 +182,25 @@ public class MyBloomFilterDuplicateRemover implements DuplicateRemover {
 
 
 
+### 多线程控制
 
+blockingQueue、线程池、数据合并保存，哪些地方有线程安全问题？
+
+> 多个线程同时合并保存一条数据，存在线程安全问题
+>
+> 解决方法：前者将抓取的数据传递给后者，后者爬取结束后统一做数据和并保存，而不是分别做
+>
+> https://blog.csdn.net/qq_46122292/article/details/118515916
+
+
+
+### 抽取爬取逻辑到接口
+
+
+
+### 添加pipeline，将结果保存至数据库
+
+他山之石：https://gitee.com/complone/zhihuMagicCrawel
 
 
 
