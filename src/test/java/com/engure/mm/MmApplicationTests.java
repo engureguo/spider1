@@ -29,6 +29,9 @@ class MmApplicationTests {
         //MonitorExample.main(null);
 
 
+        System.out.println(Integer.MAX_VALUE);
+        // 0X7fff-fff
+
     }
 
 }

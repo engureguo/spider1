@@ -2,22 +2,35 @@ package com.engure.mm.spider_like2.processor;
 
 import com.engure.mm.spider_like2.MySpider;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
-public class ActualLikePageProcessor implements LikePageProcessor {
+@Component
+public class ActualLikePageProcessor implements PageProcessor {
+
+    //统计下载数据
+    private AtomicInteger all_imgs = new AtomicInteger();
+    private AtomicInteger succ_imgs = new AtomicInteger();
+
+    public String getStatics() {
+        int a = succ_imgs.get();
+        int b = all_imgs.get();
+        return "下载统计：下载/所有 = " + a + "/" + b + ", 成功率：" + String.format("%.3f", (a * 1.0) / (b * 1.0));
+    }
 
     @Override
     public void process(Page page) {
 
         String url = page.getRequest().getUrl();
 
-        //if (url.startsWith("https://www.mm618.com/like")) {
         if (url.startsWith("https://www.mm618.com/categories/xinggan")) {
             //主页
 
@@ -27,11 +40,9 @@ public class ActualLikePageProcessor implements LikePageProcessor {
             List<String> albumsLinks = page.getHtml().xpath("/html/body/section/div/div/article/h2/a/@href").all();
             List<String> albumsTitle = page.getHtml().xpath("/html/body/section/div/div/article/h2/a/text()").all();
 
-            //System.out.println("所有 albums ---------------------------------------");
             for (int i = 0; i < albumsLinks.size(); i++) {
 
                 try {
-                    //System.out.println("影集：" + albumsTitle.get(i) + " --> " + albumsLinks.get(i));
                     log.info("影集：" + albumsTitle.get(i) + " --> " + albumsLinks.get(i));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -51,10 +62,6 @@ public class ActualLikePageProcessor implements LikePageProcessor {
             String xpath2 = "/html/body/section/div[1]/a/@href";
             List<String> photoLinks1 = page.getHtml().xpath(xpath1).all();//   /123123/abc.jpg, /123123/efg.jpg.....
             List<String> photoLinks2 = page.getHtml().xpath(xpath2).all();//   /albums/123456/2, /albums/123456/3....
-            //System.out.println("影集 ------------------------------------");
-            //System.out.println("获取影集！" + url);
-            //System.out.println(photoLinks1);
-            //System.out.println(photoLinks2);
             log.info("获取影集！" + url);
             log.info(photoLinks1.toString());
             log.info(photoLinks2.toString());
@@ -62,11 +69,16 @@ public class ActualLikePageProcessor implements LikePageProcessor {
             page.addTargetRequests(photoLinks1);
             page.addTargetRequests(photoLinks2);
 
+            all_imgs.addAndGet(photoLinks1.size());
+
             if (photoLinks1.size() == 0 && photoLinks2.size() != 0) {
                 try {
                     //第一张图片
                     String img0 = page.getHtml().xpath("/html/body/section/article/p/a/img/@src").all().get(0);
                     page.addTargetRequest(img0);
+
+                    all_imgs.incrementAndGet();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -79,6 +91,9 @@ public class ActualLikePageProcessor implements LikePageProcessor {
             try {
                 String imgXpath = page.getHtml().xpath("/html/body/section/article/p/a/img/@src").all().get(0);
                 page.addTargetRequest(imgXpath);
+
+                all_imgs.incrementAndGet();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -114,6 +129,9 @@ public class ActualLikePageProcessor implements LikePageProcessor {
 
                 //System.out.println("写入成功！" + storePath);
                 log.info("写入成功！" + storePath);
+
+                succ_imgs.incrementAndGet();
+
             } catch (Exception e) {
                 //System.out.println("保存失败！！！！！");
                 log.info("保存失败！！！！！");
@@ -128,7 +146,9 @@ public class ActualLikePageProcessor implements LikePageProcessor {
 
     private final Site site = Site.me()
             .setCharset("UTF-8")
-            .setRetryTimes(3).setTimeOut(1000 * 5).setSleepTime(200);
+            .setRetryTimes(3)
+            .setTimeOut(1000 * 5)
+            .setSleepTime(200);
 
     @Override
     public Site getSite() {

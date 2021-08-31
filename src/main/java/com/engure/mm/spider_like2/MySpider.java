@@ -3,10 +3,9 @@ package com.engure.mm.spider_like2;
 import com.engure.mm.spider_like2.anno.Record;
 import com.engure.mm.spider_like2.processor.ActualLikePageProcessor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.scheduler.BloomFilterDuplicateRemover;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 
 /*
@@ -25,18 +24,24 @@ public class MySpider {
 
     public static final String STORE_PATH = "F:\\data1\\";
 
-    @Record//统计爬取时间
-    public void startCrawl() {
+    @Autowired
+    private ActualLikePageProcessor pageProcessor;
 
-        //String url = "https://www.mm618.com/like";
+    @Record//统计爬取时间
+    public void startCrawl(String... urls) {
+
         String url = "https://www.mm618.com/categories/xinggan";
 
-        Spider.create(new ActualLikePageProcessor())
+        Spider.create(pageProcessor)
+                //使用布隆过滤器，防止重复爬取
+                .setScheduler(new QueueScheduler().setDuplicateRemover(
+                        new MyBloomFilterDuplicateRemover(1000_000)))
                 //设置线程数量
-                .setScheduler(new QueueScheduler().setDuplicateRemover(new BloomFilterDuplicateRemover(10000000)))
                 .thread(Runtime.getRuntime().availableProcessors() * 10)
                 .addUrl(url)
                 .run();
+
+        log.info(pageProcessor.getStatics());
 
     }
 
