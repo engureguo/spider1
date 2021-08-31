@@ -47,12 +47,6 @@ SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorSta
 	<groupId>us.codecraft</groupId>
 	<artifactId>webmagic-core</artifactId>
 	<version>0.7.3</version>
-	<exclusions>
-		<exclusion>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</exclusion>
-	</exclusions>
 </dependency>
 
 <dependency>

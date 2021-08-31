@@ -17,7 +17,8 @@ public class ActualLikePageProcessor implements LikePageProcessor {
 
         String url = page.getRequest().getUrl();
 
-        if (url.startsWith("https://www.mm618.com/like")) {
+        //if (url.startsWith("https://www.mm618.com/like")) {
+        if (url.startsWith("https://www.mm618.com/categories/xinggan")) {
             //主页
 
             // 如果使用正则表达式，url可能会重复，
@@ -38,8 +39,8 @@ public class ActualLikePageProcessor implements LikePageProcessor {
 
             }
 
-            page.addTargetRequests(albumsLinks.subList(0, 5));
-            //page.addTargetRequests(albumsLinks);
+            //page.addTargetRequests(albumsLinks.subList(0, 5));
+            page.addTargetRequests(albumsLinks);
 
             page.setSkip(true);
         } else if (url.matches("https://www\\.mm618\\.com/albums/(\\w+)")) {

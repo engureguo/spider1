@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.scheduler.BloomFilterDuplicateRemover;
+import us.codecraft.webmagic.scheduler.QueueScheduler;
 
 /*
 
@@ -19,26 +21,19 @@ import us.codecraft.webmagic.processor.PageProcessor;
 
 @Service
 @Slf4j
-public class MySpider extends Spider {
+public class MySpider {
 
     public static final String STORE_PATH = "F:\\data1\\";
-
-    /**
-     * create a spider with pageProcessor.
-     *
-     * @param pageProcessor pageProcessor
-     */
-    public MySpider(PageProcessor pageProcessor) {
-        super(pageProcessor);
-    }
 
     @Record//统计爬取时间
     public void startCrawl() {
 
-        String url = "https://www.mm618.com/like";
+        //String url = "https://www.mm618.com/like";
+        String url = "https://www.mm618.com/categories/xinggan";
 
-        new MySpider(new ActualLikePageProcessor())
+        Spider.create(new ActualLikePageProcessor())
                 //设置线程数量
+                .setScheduler(new QueueScheduler().setDuplicateRemover(new BloomFilterDuplicateRemover(10000000)))
                 .thread(Runtime.getRuntime().availableProcessors() * 10)
                 .addUrl(url)
                 .run();
