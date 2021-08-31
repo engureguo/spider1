@@ -17,4 +17,18 @@ class MmApplicationTests {
 
     }
 
+    @Test
+    public void t1() throws Exception {
+
+        //Class<BaiduBaike> clazz = BaiduBaike.class;
+        //BaiduBaike baike = clazz.newInstance();
+        //BaiduBaike.main(null);
+        //GithubRepo.main(null);
+        //GithubRepoApi.main(null);
+        //OschinaBlog.main(null);
+        //MonitorExample.main(null);
+
+
+    }
+
 }

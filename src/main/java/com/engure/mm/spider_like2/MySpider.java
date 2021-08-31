@@ -5,10 +5,7 @@ import com.engure.mm.spider_like2.processor.ActualLikePageProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.processor.PageProcessor;
-
-import java.lang.reflect.Method;
 
 /*
 
@@ -35,7 +32,7 @@ public class MySpider extends Spider {
         super(pageProcessor);
     }
 
-    @Record
+    @Record//统计爬取时间
     public void startCrawl() {
 
         String url = "https://www.mm618.com/like";
