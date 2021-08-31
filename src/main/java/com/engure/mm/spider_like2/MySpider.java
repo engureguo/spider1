@@ -2,6 +2,7 @@ package com.engure.mm.spider_like2;
 
 import com.engure.mm.spider_like2.anno.Record;
 import com.engure.mm.spider_like2.processor.ActualLikePageProcessor;
+import com.engure.mm.spider_like2.scheduler.MyBloomFilterDuplicateRemover;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

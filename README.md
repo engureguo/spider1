@@ -124,7 +124,65 @@ IO阻塞，CPU时间浪费，增加线程以增加效率
 
 
 
-> 布隆过滤器 URL 去重
+> 集成布隆过滤器，实现URL去重
+
+guava-BloomFilter https://blog.csdn.net/qq_43341057/article/details/120027164
+
+参照 BloomFilterDuplicateRemover：
+
+```java
+public class MyBloomFilterDuplicateRemover implements DuplicateRemover {
+
+    public MyBloomFilterDuplicateRemover(int size) {
+        this(size, 0.01);
+    }
+
+    public MyBloomFilterDuplicateRemover(int size, double fpp) {
+        this.size = size;
+        this.fpp = fpp;
+        rebuild();
+    }
+
+    private AtomicInteger counter;
+
+    private int size;
+
+    private double fpp;
+
+    private BloomFilter<String> bloomFilter;
+
+    private void rebuild() {
+        counter = new AtomicInteger();
+        bloomFilter = BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()), size, fpp);
+    }
+
+    @Override
+    public boolean isDuplicate(Request request, Task task) {
+        boolean duplicate = bloomFilter.mightContain(request.getUrl());
+        if (!duplicate) { //不存在
+            bloomFilter.put(request.getUrl());
+            counter.incrementAndGet();
+        }
+        return duplicate;
+    }
+
+    //重置布隆过滤器，貌似没用上
+    @Override
+    public void resetDuplicateCheck(Task task) {
+        rebuild();
+    }
+
+    //获取布隆集合元素数量，貌似没用上
+    @Override
+    public int getTotalRequestsCount(Task task) {
+        return counter.get();
+    }
+}
+```
+
+
+
+
 
 
 
