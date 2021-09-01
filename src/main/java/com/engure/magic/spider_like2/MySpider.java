@@ -1,8 +1,8 @@
-package com.engure.mm.spider_like2;
+package com.engure.magic.spider_like2;
 
-import com.engure.mm.spider_like2.anno.Record;
-import com.engure.mm.spider_like2.processor.ActualLikePageProcessor;
-import com.engure.mm.spider_like2.scheduler.MyBloomFilterDuplicateRemover;
+import com.engure.magic.spider_like2.anno.Record;
+import com.engure.magic.spider_like2.processor.ActualLikePageProcessor;
+import com.engure.magic.spider_like2.scheduler.MyBloomFilterDuplicateRemover;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +10,14 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 
 /*
+
+对 spider_like 调整：
+* 使用注解+切面统计爬取用时
+* 线程池调优
+* 统计爬取图片成功率
+* 参考仿写BloomFilter实现url去重
+
+--------------------------------------------------------------------
 
 文件不存在，休眠200ms，爬取下载到 f:/data1/
 ------------------

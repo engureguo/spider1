@@ -1,6 +1,6 @@
-package com.engure.mm.spider_like.processor;
+package com.engure.magic.spider_like.processor;
 
-import com.engure.mm.spider_like.LikeSpider;
+import com.engure.magic.spider_like.LikeSpider;
 import us.codecraft.webmagic.Page;
 
 import java.io.File;

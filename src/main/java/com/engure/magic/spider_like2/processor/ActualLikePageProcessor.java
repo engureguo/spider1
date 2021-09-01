@@ -1,6 +1,6 @@
-package com.engure.mm.spider_like2.processor;
+package com.engure.magic.spider_like2.processor;
 
-import com.engure.mm.spider_like2.MySpider;
+import com.engure.magic.spider_like2.MySpider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;

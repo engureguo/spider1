@@ -1,4 +1,4 @@
-package com.engure.mm.spider_like2.anno;
+package com.engure.magic.spider_like2.anno;
 
 
 import java.lang.annotation.ElementType;

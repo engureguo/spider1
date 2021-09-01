@@ -1,4 +1,4 @@
-package com.engure.mm.spider_like.processor;
+package com.engure.magic.spider_like.processor;
 
 import us.codecraft.webmagic.Page;
 

@@ -1,4 +1,4 @@
-package com.engure.mm.spider_like2.scheduler;
+package com.engure.magic.spider_like2.scheduler;
 
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;

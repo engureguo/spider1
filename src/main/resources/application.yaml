@@ -1,0 +1,17 @@
+
+site:
+  retryTimes: 3   # 重试次数
+  timeOut: 5000   # 请求超时时间
+  sleepTime: 200  # 休眠次数
+  threadCount: 80 # 线程数量
+  charset: UTF-8  # 编码
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0
+  cookies:        # 配置cookies
+    test: coki
+    demo: coke
+    SUBP: 0033WrSXqPxfM72-Ws9jqgMF55529P9D9WWjJF_oj8GsMhUmWXRLoQ5w
+    wb_view_log: 1536*8641.25
+    SUB: _2AkMWc-USf8NxqwJRmPEUzGjhboVywgjEieKgLxTJJRMxHRl-yj9jqnQBtRB6PfPL_VOW2nwPPFXj-7ohr2_rFFpFjc4S
+  headers:        # 配置请求头
+    hedr: hhdd
+

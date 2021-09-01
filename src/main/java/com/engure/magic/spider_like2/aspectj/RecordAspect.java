@@ -1,4 +1,4 @@
-package com.engure.mm.spider_like2.aspectj;
+package com.engure.magic.spider_like2.aspectj;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,7 +16,7 @@ public class RecordAspect {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Pointcut("@annotation(com.engure.mm.spider_like2.anno.Record)")
+    @Pointcut("@annotation(com.engure.magic.spider_like2.anno.Record)")
     public void doPointCut() {
 
     }

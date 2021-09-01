@@ -1,7 +1,7 @@
-package com.engure.mm.spider_like;
+package com.engure.magic.spider_like;
 
-import com.engure.mm.spider_like.processor.ActualLikePageProcessor;
-import com.engure.mm.spider_like.processor.LikePageProcessor;
+import com.engure.magic.spider_like.processor.LikePageProcessor;
+import com.engure.magic.spider_like.processor.ActualLikePageProcessor;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -10,6 +10,8 @@ import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * 爬取点赞排行页所有图片
+ * </p>
+ * 爬取逻辑抽取到一个类中，使用多个if-else判断
  */
 
 @Component
@@ -45,7 +47,7 @@ public class LikeSpider implements PageProcessor {
         //点赞排行页
         String url = "https://www.mm618.com/like";
 
-        setLikePageProcessor(new ActualLikePageProcessor());
+        setLikePageProcessor(new ActualLikePageProcessor());//需要传入抽取的接口，而非PageProcessor
         me().addUrl(url)
                 .thread(5).run();
 
@@ -59,7 +61,7 @@ public class LikeSpider implements PageProcessor {
     @Override
     public void process(Page page) {
 
-        likePageProcessor.doProcess(page);
+        likePageProcessor.doProcess(page);//逻辑抽取
 
     }
 

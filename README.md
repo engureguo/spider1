@@ -198,6 +198,88 @@ blockingQueue、线程池、数据合并保存，哪些地方有线程安全问�
 
 
 
+
+
+
+
+### 基于注解的爬虫
+
+
+
+```java
+
+//////////////爬虫启动，相比之前的爬虫传入PageProcessor，这里传入Model类
+
+OOSpider.create(site, pageModelPipeline, NoticeModel.class)
+        .setScheduler(
+                new QueueScheduler().setDuplicateRemover(new MyBloomFilterDuplicateRemover(expectedUrlNum)))
+        .thread(Runtime.getRuntime().availableProcessors() * 10)
+        .addUrl("https://www.cup.edu.cn/culture/bfsd/index.htm")
+        .run();
+
+
+////////////model类
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+//1.下载并提取本页   2.匹配本页中的url，会继续下载页面
+@TargetUrl("https://www.cup.edu.cn/culture/bfsd/(\\w{32}).htm")
+//搜索本页中的匹配url，不会在本页提取数据，此注解可选
+@HelpUrl(value = "https://www.cup.edu.cn/culture/bfsd/(\\w{32}).htm") 
+public class NoticeModel {
+
+    //定义提取路径
+    //notnull=true，如果获取失败则丢弃本页结果
+    @ExtractBy(value = "/html/body/div[3]/article/div[2]/section/div/div[1]/h3/text()", notNull = true)
+    private String title;
+
+    //类型转换：string+pattern -> date
+    @Formatter(value = "yyyy-MM-dd", formatter = MyDateFormatter.class)
+    @ExtractBy(value = "/html/body/div[3]/article/div[2]/section/div/div[2]/span/text()")
+    private Date pubDate;
+
+	//提取文章内容（html块 -> string），使用 allText()，貌似是webmagic自实现的⭐⭐
+    //看源码看出来的，作者 codecraft4 有一处是这样用😄
+    @ExtractBy(value = "/html/body/div[3]/article/div[2]/section/div/div[3]/allText()")
+    private String article;
+    
+}
+
+```
+
+
+
+> `HelpUrl/TargetUrl`是一个非常有效的爬虫开发模式，TargetUrl 是我们最终要抓取的 URL，最终想要的数据都来自这里；而 HelpUrl 则是为了发现这个最终 URL，我们需要访问的页面。几乎所有垂直爬虫的需求，都可以归结为对这两类 URL 的处理：
+>
+> - 对于博客页，HelpUrl 是列表页，TargetUrl 是文章页。
+> - 对于论坛，HelpUrl 是帖子列表，TargetUrl 是帖子详情。
+> - 对于电商网站，HelpUrl 是分类列表，TargetUrl 是商品详情。
+>
+> 在这个例子中，TargetUrl 是最终的项目页，而 HelpUrl 则是项目搜索页，它会展示所有项目的链接。
+
+```java
+//1.提取本页  2.继续正则匹配，会继续下载页面
+@TargetUrl("https://www.cup.edu.cn/culture/index.htm")
+
+//在本页中正则匹配，不会在本页提取数据，此注解可选
+@HelpUrl("https://www.cup.edu.cn/culture/(\\w+)/index.htm")
+```
+
+
+
+将爬取逻辑整合在 model 上，可以自定义 ObjectFormatter 处理爬取的数据（类型转换等等），可以很方便地将对象保存到数据库，或者说爬虫要爬的就是信息的集合，而不是零散的数据。
+
+
+
+对于注解模式无法完全解决问题，作者提供了 `AfterExtractor` 接口，可以在数据抽取完后处理一些特殊的逻辑
+
+
+
+感觉这种一个 model 对象就相当于 pageprocessor 中的一个 if 分支？
+
+
+
 ### 添加pipeline，将结果保存至数据库
 
 他山之石：https://gitee.com/complone/zhihuMagicCrawel
