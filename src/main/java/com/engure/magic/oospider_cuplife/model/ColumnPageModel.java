@@ -9,7 +9,8 @@ import us.codecraft.webmagic.model.annotation.TargetUrl;
 @HelpUrl("https://www.cup.edu.cn/culture/(\\w+)/(\\w{32}).htm")
 public class ColumnPageModel {
 
-    @ExtractBy(value = "", notNull = true)//排除掉本页的数据处理
-    private String passBy;
+    //不进行数据处理怎么办？
+    //* 保存数据是进行instanceof类型判断
+    //* 或者实现AfterExtractor接口setSkip（好一点？）
 
 }

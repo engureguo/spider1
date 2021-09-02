@@ -1,17 +1,28 @@
-
 site:
-  retryTimes: 3   # 重试次数
-  timeOut: 5000   # 请求超时时间
-  sleepTime: 200  # 休眠次数
-  threadCount: 80 # 线程数量
-  charset: UTF-8  # 编码
+  retryTimes: 3
+  timeOut: 5000
+  sleepTime: 200
+  threadCount: 80
+  charset: UTF-8
   userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0
-  cookies:        # 配置cookies
+  cookies:
     test: coki
     demo: coke
+    # weibo
     SUBP: 0033WrSXqPxfM72-Ws9jqgMF55529P9D9WWjJF_oj8GsMhUmWXRLoQ5w
     wb_view_log: 1536*8641.25
     SUB: _2AkMWc-USf8NxqwJRmPEUzGjhboVywgjEieKgLxTJJRMxHRl-yj9jqnQBtRB6PfPL_VOW2nwPPFXj-7ohr2_rFFpFjc4S
-  headers:        # 配置请求头
+  headers:
     hedr: hhdd
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/spider?serverTimezone=Hongkong&encodingCharset=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.engure.magic.oospider_cuplife.pojo
+
 

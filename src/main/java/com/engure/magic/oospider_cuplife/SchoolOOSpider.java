@@ -1,6 +1,8 @@
 package com.engure.magic.oospider_cuplife;
 
 
+import com.engure.magic.oospider_cuplife.model.ColumnPageModel;
+import com.engure.magic.oospider_cuplife.model.IndexPageModel;
 import com.engure.magic.oospider_cuplife.model.NoticeModel;
 import com.engure.magic.spider_like2.scheduler.MyBloomFilterDuplicateRemover;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,9 @@ public class SchoolOOSpider {
 
         int expectedUrlNum = 1000000;
 
-        OOSpider.create(site, pageModelPipeline, NoticeModel.class/*, NoticeListModel.class*/)
+        Class[] classes = {IndexPageModel.class, ColumnPageModel.class, NoticeModel.class};
+
+        OOSpider.create(site, pageModelPipeline, classes)
                 .setScheduler(
                         new QueueScheduler().setDuplicateRemover(new MyBloomFilterDuplicateRemover(expectedUrlNum)))
                 .thread(Runtime.getRuntime().availableProcessors() * 10)
