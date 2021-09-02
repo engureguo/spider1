@@ -8,11 +8,14 @@
         <result column="title" property="title" />
         <result column="article" property="article" />
         <result column="pubDate" property="pubdate" />
+        <!--column是关键字，不要用做列名-->
+        <result column="column0" property="column0" />
+        <result column="link" property="link" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        title, id, article, pubDate
+        title, id, article, pubDate, column0 ,link
     </sql>
 
 </mapper>

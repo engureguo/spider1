@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.OOSpider;
+import us.codecraft.webmagic.pipeline.FilePageModelPipeline;
+import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
 import us.codecraft.webmagic.pipeline.PageModelPipeline;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 
@@ -41,10 +43,11 @@ public class SchoolOOSpider {
         Class[] classes = {IndexPageModel.class, ColumnPageModel.class, NoticeModel.class};
 
         OOSpider.create(site, pageModelPipeline, classes)
+                //.addPageModel(new JsonFilePageModelPipeline("F:/data1"), NoticeModel.class)
                 .setScheduler(
                         new QueueScheduler().setDuplicateRemover(new MyBloomFilterDuplicateRemover(expectedUrlNum)))
                 .thread(Runtime.getRuntime().availableProcessors() * 10)
-                .addUrl("https://www.cup.edu.cn/culture/bfsd/index.htm")
+                .addUrl("https://www.cup.edu.cn/culture/index.htm")
                 .run();
 
     }

@@ -10,6 +10,8 @@ public class Model2Pojo {
         a.setTitle(noticeModel.getTitle());
         a.setArticle(noticeModel.getArticle());
         a.setPubdate(noticeModel.getPubDate());
+        a.setColumn0(noticeModel.getColumn0());
+        a.setLink(noticeModel.getLink());
         return a;
     }
 

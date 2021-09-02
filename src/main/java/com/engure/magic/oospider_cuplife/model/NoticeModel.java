@@ -1,10 +1,14 @@
 package com.engure.magic.oospider_cuplife.model;
 
 
+import com.engure.magic.oospider_cuplife.model.formatter.MyColumnFormatter;
+import com.engure.magic.oospider_cuplife.model.formatter.MyDateFormatter;
+import com.engure.magic.oospider_cuplife.model.formatter.MyLinkFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.Formatter;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
 
@@ -30,5 +34,15 @@ public class NoticeModel {
     //提取文章内容（html -> string），使用 allText()，貌似是webmagic自实现的
     @ExtractBy(value = "/html/body/div[3]/article/div[2]/section/div/div[3]/allText()")
     private String article;
+
+    //栏目，定义formatter进行修饰
+    @Formatter(formatter = MyColumnFormatter.class)
+    @ExtractBy(value = "/html/body/div[3]/article/div[1]/span/allText()")
+    private String column0;
+
+    //提取链接，定义formatter进行修饰
+    @Formatter(formatter = MyLinkFormatter.class)
+    @ExtractByUrl(value = "/\\w+/\\w{32}")
+    private String link;
 
 }

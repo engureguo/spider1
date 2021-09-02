@@ -282,13 +282,56 @@ public class NoticeModel {
 
 ### 添加pipeline，将结果保存至数据库
 
+```java
+@Component
+@Slf4j
+public class MyPipeline implements PageModelPipeline<Object> {
+
+    @Autowired
+    private IArticleService articleService;
+
+    @Override
+    public void process(Object o, Task task) {
+
+        if (o instanceof NoticeModel) {
+            NoticeModel model = (NoticeModel) o;
+            Article article = Model2Pojo.model2(model);//model to pojo
+            try {
+                //保存到数据库
+                boolean saveOrUpdate = articleService.saveOrUpdate(article,
+                        new UpdateWrapper<Article>()
+                                .eq("title", article.getTitle()));
+                log.info("saveOrUpdate " + saveOrUpdate + ", title = " + article.getTitle());
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("SQL语句执行失败>>>" + e.getCause());
+            }
+        }
+
+    }
+}
+```
+
+可以通过 `addPageModel` 添加 pipeline（自定义或者使用提供的），将数据保存到不同位置
+
+
+
+### 使用观察者模式解耦 pipeline的数据保存代码
+
+如果只允许使用一个自定义 pipeline 进行数据保存，那么最简单的方法就是将保存方法都写到这个 pipeline 中。
+
+缺点：代码写死，灵活性差。
+
+为了提高数据保存的灵活性，摒弃了原本将数据保存代码写死的方法，使用观察者模式，抽取不同的数据保存方法到观察者，使用异步方式保存数据，降低了代码耦合性，提高了系统吞吐率。
+
+
+
+
+
+----
+
+
+
 他山之石：https://gitee.com/complone/zhihuMagicCrawel
-
-
-
-
-
-
-
-
 

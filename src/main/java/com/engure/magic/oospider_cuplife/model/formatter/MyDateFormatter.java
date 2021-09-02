@@ -1,4 +1,4 @@
-package com.engure.magic.oospider_cuplife.model;
+package com.engure.magic.oospider_cuplife.model.formatter;
 
 import lombok.extern.slf4j.Slf4j;
 import us.codecraft.webmagic.model.formatter.ObjectFormatter;

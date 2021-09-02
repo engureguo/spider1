@@ -47,5 +47,9 @@ public class Article implements Serializable {
     @TableField("pubDate")
     private Date pubdate;
 
+    private String column0;
+
+    private String link;
+
 
 }
